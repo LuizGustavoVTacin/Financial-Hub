@@ -4,5 +4,5 @@ App/*
 calc/*
 *.drawio
 *.py
-*.md
+.md
 Projeto/imgs
