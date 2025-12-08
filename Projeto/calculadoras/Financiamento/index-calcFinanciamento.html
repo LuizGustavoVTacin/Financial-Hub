@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Financiamento</title>
+    
+    <link rel="stylesheet" href="style-calcFinanciamento.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+    <div class="calc-wrapper">
+        
+        <main class="calc-main">
+            
+            <header class="calc-header relative">
+                <div class="title-wrapper" onclick="toggleMenu()">
+                    <h2 id="titulo-func">Descobrir Taxa Real</h2>
+                    <span class="material-icons arrow-icon">expand_more</span>
+                </div>
+                <p id="desc-func">Saiba qual a taxa real cobrada no seu financiamento.</p>
+
+                <div id="menu-modos" class="dropdown-menu hidden">
+                    <div class="dropdown-item" onclick="mudarModo('taxa')">
+                        <strong>Descobrir Taxa Real</strong>
+                        <small>Tenho a parcela e o valor, quero a taxa.</small>
+                    </div>
+                    <div class="dropdown-item" onclick="mudarModo('parcela')">
+                        <strong>Simular Parcela</strong>
+                        <small>Tenho a taxa e o valor, quero a parcela.</small>
+                    </div>
+                    <div class="dropdown-item" onclick="mudarModo('valor')">
+                        <strong>Descobrir Valor Financiado</strong>
+                        <small>Tenho a parcela e a taxa, quanto posso financiar?</small>
+                    </div>
+                </div>
+            </header>
+
+            <form class="inputs-grid" onsubmit="return false;">
+                
+                <div class="input-group" id="group-valor">
+                    <label for="val-inicial">Valor Financiado</label>
+                    <div class="input-wrapper">
+                        <span class="currency">R$</span>
+                        <input type="text" id="val-inicial" value="50.000,00">
+                    </div>
+                </div>
+
+                <div class="input-group" id="group-parcela">
+                    <label for="val-mensal">Valor da Parcela</label>
+                    <div class="input-wrapper">
+                        <span class="currency">R$</span>
+                        <input type="text" id="val-mensal" value="1.500,00">
+                    </div>
+                </div>
+
+                <div class="input-group" id="group-taxa" style="display: none;">
+                    <label for="val-taxa">Taxa de Juros</label>
+                    <div class="input-wrapper compound">
+                        <span class="prefix">%</span>
+                        <input type="text" id="val-taxa" value="1,50">
+                        <select id="tipo-taxa-input" class="suffix-select">
+                            <option value="mensal" selected>Mensal</option>
+                            <option value="anual">Anual</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group" id="group-periodo">
+                    <label for="val-periodo">Período</label>
+                    <div class="input-wrapper compound">
+                        <input type="text" id="val-periodo" value="48">
+                        <select id="tipo-periodo" class="suffix-select">
+                            <option value="meses" selected>Meses</option>
+                            <option value="anos">Anos</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+
+            <div class="divider"></div>
+
+            <div class="results-container">
+                <div class="result-card highlight" id="card-res-1">
+                    <span class="res-label" id="label-res-1">Taxa Mensal</span>
+                    <span id="res-1" class="res-value">---</span>
+                </div>
+                <div class="result-card" id="card-res-2">
+                    <span class="res-label" id="label-res-2">Taxa Anual</span>
+                    <span id="res-2" class="res-value">---</span>
+                </div>
+                <div class="result-card" id="card-total">
+                    <span class="res-label">Total Pago</span>
+                    <span id="res-total" class="res-value">---</span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="btn-calcular" class="btn btn-primary">Calcular</button>
+                <button id="btn-limpar" class="btn btn-secondary">Limpar</button>
+            </div>
+        </main>
+
+        <aside class="calc-sidebar">
+            <div class="sidebar-item" onclick="window.location.href='../jurosCompostos/index-calcJurosComposto.html'">
+                <div class="img-box">
+                    <img src="../../imgs/JurosCompostos.png" alt="Juros Compostos">
+                </div>
+                <span>Juros Compostos</span>
+            </div>
+
+            <div class="sidebar-item active-item">
+                <div class="img-box">
+                    <img src="../../imgs/Financiamento.png" alt="Financiamento">
+                </div>
+                <span>Financiamento</span>
+            </div>
+
+            <div class="sidebar-item" onclick="alert('Funcionalidade em desenvolvimento!')">
+                <div class="img-box">
+                    <img src="../../imgs/calendario.png" alt="Planejamento">
+                </div>
+                <span>Planejamento</span>
+            </div>
+            
+            <div class="sidebar-item" onclick="alert('Funcionalidade em desenvolvimento!')">
+                <div class="img-box">
+                    <img src="../../imgs/Ferias.png" alt="Ferias">
+                </div>
+                <span>Férias</span>
+            </div>
+        </aside>
+
+    </div>
+
+    <script src="../../utils.js"></script>
+    <script src="api-calcFinanciamento.js"></script>
+    <script src="script-calcFinanciamento.js"></script>
+    
+    <script>
+        // Script de Dark Mode
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+</body>
+</html>

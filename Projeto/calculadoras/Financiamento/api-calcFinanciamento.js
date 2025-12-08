@@ -1,0 +1,65 @@
+const FinanciamentoAPI = {
+
+    /**
+     * SOLVER NUMÉRICO (Método de Newton-Raphson)
+     * Necessário para encontrar a taxa de juros (Raiz da equação)
+     */
+    _fsolve: (equacao, chuteInicial = 0.01) => {
+        let x = chuteInicial;
+        const tolerancia = 1e-7;
+        const maxIteracoes = 100;
+        const h = 1e-5; 
+
+        for (let i = 0; i < maxIteracoes; i++) {
+            const y = equacao(x);
+            
+            // Se o resultado for muito próximo de 0, achamos a raiz
+            if (Math.abs(y) < tolerancia) return x;
+
+            // Derivada numérica
+            const y_plus = equacao(x + h);
+            const derivada = (y_plus - y) / h;
+
+            if (Math.abs(derivada) < 1e-9) break;
+
+            x = x - (y / derivada);
+        }
+        return x;
+    },
+
+    /**
+     * MODO 1: Descobrir Taxa de Juros (Juros do Empréstimo)
+     * Usa o Solver Numérico acima.
+     */
+    calcJurosEmprestimo: (valorEmprestado, parcela, meses) => {
+        const equacao = (i) => {
+            if (Math.abs(i) < 1e-9) return parcela - (valorEmprestado / meses); 
+            // Fórmula: PMT - PV * [ i(1+i)^n ] / [ (1+i)^n - 1 ] = 0
+            // Simplificada para busca de raiz:
+            return parcela - (valorEmprestado * i) / (1 - Math.pow(1 + i, -meses));
+        };
+
+        const taxaDecimal = FinanciamentoAPI._fsolve(equacao, 0.01);
+        return taxaDecimal; 
+    },
+
+    /**
+     * MODO 2: Simular Parcela (PMT)
+     * Fórmula Price: PMT = PV * [ i(1+i)^n ] / [ (1+i)^n - 1 ]
+     */
+    calcParcela: (pv, i, n) => {
+        if (i === 0) return pv / n;
+        return pv * ( (i * Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1) );
+    },
+
+    /**
+     * MODO 3: Descobrir Valor Financiado (PV)
+     * Fórmula Price Inversa: PV = PMT * [ (1 - (1+i)^-n) / i ]
+     */
+    calcValorFinanciado: (pmt, i, n) => {
+        if (i === 0) return pmt * n;
+        return pmt * ( (1 - Math.pow(1 + i, -n)) / i );
+    }
+};
+
+window.FinanciamentoAPI = FinanciamentoAPI;

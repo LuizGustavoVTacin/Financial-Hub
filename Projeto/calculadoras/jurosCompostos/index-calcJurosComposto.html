@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Juros Compostos</title>
+    <link rel="stylesheet" href="style-calcJurosComposto.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+    <div class="calc-wrapper">
+        
+        <main class="calc-main">
+            
+            <header class="calc-header relative">
+                <div class="title-wrapper" onclick="toggleMenu()">
+                    <h2 id="titulo-func">Simular Juros Composto</h2>
+                    <span class="material-icons arrow-icon">expand_more</span>
+                </div>
+                <p id="desc-func">Planeje seu futuro com juros compostos.</p>
+
+                <div id="menu-modos" class="dropdown-menu hidden">
+                    <div class="dropdown-item" onclick="mudarModo('composto')">
+                        <strong>Juros Compostos</strong>
+                        <small>Juros sobre juros (Padrão).</small>
+                    </div>
+                    
+                    <div class="dropdown-item" onclick="mudarModo('simples')">
+                        <strong>Juros Simples</strong>
+                        <small>Rendimento linear (Ideal para curto prazo).</small>
+                    </div>
+                </div>
+            </header>
+
+            <form class="inputs-grid" onsubmit="return false;">
+                
+                <div class="input-group" id="group-valor">
+                    <label for="val-inicial">Valor Inicial</label>
+                    <div class="input-wrapper">
+                        <span class="currency">R$</span>
+                        <input type="text" id="val-inicial" value="10.000,00">
+                    </div>
+                </div>
+
+                <div class="input-group" id="group-parcela">
+                    <label for="val-mensal">Aporte Mensal</label>
+                    <div class="input-wrapper">
+                        <span class="currency">R$</span>
+                        <input type="text" id="val-mensal" value="500,00">
+                    </div>
+                </div>
+
+                <div class="input-group" id="group-taxa">
+                    <label for="val-taxa">Taxa de Juros</label>
+                    <div class="input-wrapper compound">
+                        <span class="prefix">%</span>
+                        <input type="text" id="val-taxa" value="13,75">
+                        
+                        <select id="tipo-taxa" class="suffix-select">
+                            <option value="anual" selected>Anual</option>
+                            <option value="mensal">Mensal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group" id="group-periodo">
+                    <label for="val-periodo">Período</label>
+                    <div class="input-wrapper compound">
+                        <input type="text" id="val-periodo" value="10"> 
+                        <select id="tipo-periodo" class="suffix-select">
+                            <option value="anos" selected>Anos</option>
+                            <option value="meses">Meses</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+
+            <div class="divider"></div>
+
+            <div class="results-container">
+                <div class="result-card highlight">
+                    <span class="res-label">Valor Total Final</span>
+                    <span id="res-total" class="res-value">R$ ---</span>
+                </div>
+                <div class="result-card">
+                    <span class="res-label">Total Investido</span>
+                    <span id="res-investido" class="res-value">R$ ---</span>
+                </div>
+                <div class="result-card">
+                    <span class="res-label">Total em Juros</span>
+                    <span id="res-juros" class="res-value">R$ ---</span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="btn-calcular" class="btn btn-primary">Calcular Rendimento</button>
+                <button id="btn-limpar" class="btn btn-secondary">Limpar</button>
+            </div>
+        </main>
+
+        <aside class="calc-sidebar">
+            <div class="sidebar-item active-item">
+                <div class="img-box">
+                    <img src="../../imgs/JurosCompostos.png" alt="Juros Compostos">
+                </div>
+                <span>Juros</span>
+            </div>
+
+            <div class="sidebar-item" onclick="window.location.href='../Financiamento/index-calcFinanciamento.html'">
+                <div class="img-box">
+                    <img src="../../imgs/Financiamento.png" alt="Financiamento">
+                </div>
+                <span>Financiamento</span>
+            </div>
+
+            <div class="sidebar-item" onclick="alert('Funcionalidade em desenvolvimento!')">
+                <div class="img-box">
+                    <img src="../../imgs/calendario.png" alt="Planejamento">
+                </div>
+                <span>Planejamento</span>
+            </div>
+            
+            <div class="sidebar-item" onclick="alert('Funcionalidade em desenvolvimento!')">
+                <div class="img-box">
+                    <img src="../../imgs/Ferias.png" alt="Ferias">
+                </div>
+                <span>Férias</span>
+            </div>
+        </aside>
+
+    </div>
+
+    <script src="../../utils.js"></script>
+    <script src="api-calcJurosCompostos.js"></script>
+    <script src="script-calcJurosComposto.js"></script>
+    
+    <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+        });
+    </script>
+</body>
+</html>
