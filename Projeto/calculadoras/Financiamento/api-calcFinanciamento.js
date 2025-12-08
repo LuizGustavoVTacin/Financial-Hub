@@ -59,6 +59,63 @@ const FinanciamentoAPI = {
     calcValorFinanciado: (pmt, i, n) => {
         if (i === 0) return pmt * n;
         return pmt * ( (1 - Math.pow(1 + i, -n)) / i );
+    },
+
+   /**
+     * MODO 4: Calcular Amortização
+     * Retorna um objeto com os dados para a interface usar.
+     */
+    calcAmortizacao: (divida, taxa, n, amortizacao, tipoAmortizacao) => {
+        // 1. Cenário Atual
+        const parcelaOriginal = FinanciamentoAPI.calcParcela(divida, taxa, n);
+        const totalRestanteOriginal = parcelaOriginal * n;
+
+        // 2. Novo Saldo
+        const novoSaldoDevedor = divida - amortizacao;
+
+        // Se quitou a dívida
+        if (novoSaldoDevedor <= 0.01) {
+            return {
+                status: 'QUITADO',
+                parcelaOriginal: parcelaOriginal,
+                novoValor: 0,
+                economia: totalRestanteOriginal - amortizacao,
+                msg: "Dívida Quitada!"
+            };
+        }
+
+        let novoValorPrincipal = 0;
+        let novoTotal = 0;
+        let novoN = n;
+        let novaParcela = parcelaOriginal;
+
+        if (tipoAmortizacao === 'prazo') {
+            // REDUZIR PRAZO (Mantém parcela, reduz N)
+            const numerador = Math.log(1 - (novoSaldoDevedor * taxa / parcelaOriginal));
+            const denominador = Math.log(1 + taxa);
+            novoN = -(numerador / denominador);
+            
+            novoValorPrincipal = Math.ceil(novoN); // Retorna número de parcelas
+            novoTotal = parcelaOriginal * novoN; // Total considerando parcelas inteiras
+
+        } else {
+            // REDUZIR PARCELA (Mantém N, reduz PMT)
+            novaParcela = FinanciamentoAPI.calcParcela(novoSaldoDevedor, taxa, n);
+            
+            novoValorPrincipal = novaParcela; // Retorna valor monetário
+            novoTotal = novaParcela * n;
+        }
+
+        const economia = totalRestanteOriginal - (novoTotal + amortizacao);
+
+        return {
+            status: 'OK',
+            tipo: tipoAmortizacao,
+            parcelaOriginal: parcelaOriginal, // Retorna a parcela antiga para comparação
+            prazoOriginal: n,                 // Retorna o prazo antigo
+            novoValor: novoValorPrincipal,
+            economia: economia
+        };
     }
 };
 

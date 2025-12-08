@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
+    <!-- Cria a barra lateral de opções -->
     <aside class="sidebar">
         <div class="profile-container" onclick="alert('Funcionalidade em desenvolvimento!')">
             <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
@@ -39,8 +39,9 @@
         </nav>
     </aside>
 
+    
     <main class="main-content">
-        
+        <!-- Cria a barra superior -->
         <header class="top-header">
             <h1 id="page-title">Dashboard</h1>
             
@@ -55,9 +56,9 @@
                 </button>
             </div>
         </header>
-
+        
         <div class="content-wrapper">
-            
+            <!-- Cria a exibição dos dados -->
             <div id="view-dashboard" class="view-section animate-fade-in">
                 <div class="chart-card">
                     <h3>Diferença de Amplitude Média</h3>
@@ -65,7 +66,7 @@
                         <canvas id="financialChart"></canvas>
                     </div>
                 </div>
-
+                <!-- Cria as exibições laterais de resumo -->
                 <div class="cards-list custom-scrollbar">
                     <div class="card">
                         <p class="label">Saldo Mensal</p>

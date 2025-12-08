@@ -1,25 +1,25 @@
 # 📈💻💰 Financial Platform
 
-Personal platofrm to **manage finances**, **monitor profits**, and **track global financial data**.
+Plataforma pessoal para **gerenciamento de finanças**, **monitorar rendimentos**, **visualizar dados financeiros em tempo real** e **calculadora geral de finanças**.
 
-> <br> ⚠️ This is a personal-use tool, built for experimentation and learning.
-It is **not intended for commercial distribution or multi-user environments**.
+> <br> ⚠️ Esta é uma ferramenta pessoal, feita para experimentação e aprendizado.
+**Não há intenção de distribuição comercial**.
 <br>
 
 ---
 
-## 🌟 Features
+## 🌟 Funcionalidades
 
-- 💵 Track income and expenses
-- 📊 Visualize profits and performance over time
-- 🌍 Access and monitor real-time global financial data (e.g., currencies, stocks, etc.)
-- 🧾 Export financial reports
+- 💵 Geraciamento de contas e recebíveis
+- 📊 Visualizar rendimentos e performance conforme o tempo
+- :abacus: Calculadora financeira
+- 🚪Monitoramento de dados financeiros em tempo real
 
 ---
 
 ## 🛠️ Tech Stack
 
-- Qt 5 (Desktop Interface)
+- Qt 6 (Desktop Interface)
 - HTML/CSS/JS (Web Interface )
 - PostgreSQL (Database)
 
@@ -27,11 +27,11 @@ It is **not intended for commercial distribution or multi-user environments**.
 
 ## 🎯 Project Purpose
 
-This project was created as a **personal financial management tool** to:
+Este projeto foi criado como um **ferramenta pessoal de gerenciamento financeiro** para:
 
-- Practice software development and data science skills  
-- Organize and analyze personal financial data  
-- Explore financial APIs and data visualization techniques  
+- Praticar o desenvolvimento de software e habilidades em ciência de dados
+- Organizar e analizar dados de finanças pessoais
+- Explorar APIs financeiras e técnicas de visualização de dados  
 
 ---
 

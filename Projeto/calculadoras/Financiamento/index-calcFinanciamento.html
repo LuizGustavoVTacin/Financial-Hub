@@ -34,13 +34,17 @@
                         <strong>Descobrir Valor Financiado</strong>
                         <small>Tenho a parcela e a taxa, quanto posso financiar?</small>
                     </div>
+                    <div class="dropdown-item" onclick="mudarModo('amortizacao')">
+                        <strong>Tabela de Amortização</strong>
+                        <small>Gerar tabela de amortização do financiamento.</small>
+                    </div>
                 </div>
             </header>
 
             <form class="inputs-grid" onsubmit="return false;">
                 
                 <div class="input-group" id="group-valor">
-                    <label for="val-inicial">Valor Financiado</label>
+                    <label for="val-inicial">Saldo Devedor / Valor</label>
                     <div class="input-wrapper">
                         <span class="currency">R$</span>
                         <input type="text" id="val-inicial" value="50.000,00">
@@ -55,7 +59,7 @@
                     </div>
                 </div>
 
-                <div class="input-group" id="group-taxa" style="display: none;">
+                <div class="input-group" id="group-taxa">
                     <label for="val-taxa">Taxa de Juros</label>
                     <div class="input-wrapper compound">
                         <span class="prefix">%</span>
@@ -68,12 +72,30 @@
                 </div>
 
                 <div class="input-group" id="group-periodo">
-                    <label for="val-periodo">Período</label>
+                    <label for="val-periodo">Período Restante</label>
                     <div class="input-wrapper compound">
                         <input type="text" id="val-periodo" value="48">
                         <select id="tipo-periodo" class="suffix-select">
                             <option value="meses" selected>Meses</option>
                             <option value="anos">Anos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group" id="group-amortizacao-valor" style="display: none;">
+                    <label for="val-amortizacao-valor">Valor a Amortizar</label>
+                    <div class="input-wrapper">
+                        <span class="currency">R$</span>
+                        <input type="text" id="val-amortizacao-valor" value="5.000,00">
+                    </div>
+                </div>
+
+                <div class="input-group" id="group-amortizacao" style="display: none;">
+                    <label for="tipo-amortizacao">O que reduzir?</label>
+                    <div class="input-wrapper">
+                        <select id="tipo-amortizacao" class="suffix-select">
+                            <option value="prazo" selected>Reduzir Prazo</option>
+                            <option value="parcela">Reduzir Parcela</option>
                         </select>
                     </div>
                 </div>
@@ -95,7 +117,7 @@
                     <span id="res-total" class="res-value">---</span>
                 </div>
             </div>
-
+          
             <div class="actions">
                 <button id="btn-calcular" class="btn btn-primary">Calcular</button>
                 <button id="btn-limpar" class="btn btn-secondary">Limpar</button>
