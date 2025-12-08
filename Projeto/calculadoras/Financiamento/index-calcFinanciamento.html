@@ -138,11 +138,34 @@
     <script src="api-calcFinanciamento.js"></script>
     <script src="script-calcFinanciamento.js"></script>
     
-    <script>
-        // Script de Dark Mode
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
+<script>
+        // --- LÓGICA UNIVERSAL DE TEMA ---
+        
+        function carregarTema() {
+            // 1. Tenta pegar do localStorage (compartilhado com o dashboard)
+            const temaSalvo = localStorage.getItem('theme');
+            const preferenciaSistema = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (temaSalvo === 'dark' || (!temaSalvo && preferenciaSistema)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
         }
+
+        // Executa imediatamente ao abrir o iframe
+        carregarTema();
+
+        // 2. OUVINTE DE EVENTOS: Escuta o Dashboard mandar mudar o tema em tempo real
+        window.addEventListener('message', (event) => {
+            if (event.data === 'set-dark') {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark'); // Garante sincronia
+            } else if (event.data === 'set-light') {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        });
     </script>
 </body>
 </html>

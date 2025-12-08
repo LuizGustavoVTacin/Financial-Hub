@@ -52,6 +52,7 @@ window.mudarModo = function(modo) {
     document.getElementById('btn-calcular').click();
 };
 
+
 // --- INICIALIZAÇÃO ---
 document.addEventListener('DOMContentLoaded', () => {
  

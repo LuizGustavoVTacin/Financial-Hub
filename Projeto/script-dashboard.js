@@ -1,17 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- NAVEGAÇÃO ---
-    // Tornamos a função global (window) porque ela é chamada no onclick do HTML
+    // --- NAVEGAÇÃO (Mantida igual) ---
     window.navigateTo = function(view) {
         const dashView = document.getElementById('view-dashboard');
         const calcView = document.getElementById('view-calculadora');
         const title = document.getElementById('page-title');
         
-        // Botões
         const btnDash = document.getElementById('nav-dashboard');
         const btnCalc = document.getElementById('nav-calculadora');
 
-        // Resetar ativos
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
 
         if (view === 'dashboard') {
@@ -27,20 +24,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // --- MODO NOTURNO ---
+    // --- MODO NOTURNO (LÓGICA NOVA) ---
     const btnTheme = document.getElementById('theme-toggle');
     const html = document.documentElement;
+    const iframe = document.getElementById('app-frame'); // Referência ao iframe
 
-    // Detectar preferência do sistema
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        html.classList.add('dark');
+    // Função para aplicar o tema e salvar
+    function aplicarTema(tema) {
+        if (tema === 'dark') {
+            html.classList.add('dark');
+            // Avisa o iframe para ficar dark
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage('set-dark', '*');
+            }
+        } else {
+            html.classList.remove('dark');
+            // Avisa o iframe para ficar light
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage('set-light', '*');
+            }
+        }
+        // Salva na memória do navegador
+        localStorage.setItem('theme', tema);
     }
 
+    // 1. Ao Carregar: Verifica memória ou preferência do sistema
+    const temaSalvo = localStorage.getItem('theme');
+    const preferenciaSistema = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (temaSalvo === 'dark' || (!temaSalvo && preferenciaSistema)) {
+        aplicarTema('dark');
+    } else {
+        aplicarTema('light');
+    }
+
+    // 2. Ao Clicar: Alterna e Salva
     btnTheme.addEventListener('click', () => {
-        html.classList.toggle('dark');
+        const isDark = html.classList.contains('dark');
+        aplicarTema(isDark ? 'light' : 'dark');
     });
 
-    // --- CHART.JS ---
+    // --- CHART.JS (Mantido igual) ---
     const ctx = document.getElementById('financialChart').getContext('2d');
             
     new Chart(ctx, {
@@ -65,9 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             maintainAspectRatio: false,
             scales: {
                 y: {
-                    beginAtZero: false,
-                    min: 0.8,
-                    max: 1.8,
+                    beginAtZero: false, min: 0.8, max: 1.8,
                     grid: { color: 'rgba(0, 0, 0, 0.05)', borderDash: [5, 5] }
                 },
                 x: {
@@ -75,10 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             },
             plugins: {
-                legend: {
-                    display: true, position: 'top', align: 'end',
-                    labels: { usePointStyle: true, boxWidth: 8 }
-                }
+                legend: { display: true, position: 'top', align: 'end', labels: { usePointStyle: true, boxWidth: 8 } }
             }
         }
     });
