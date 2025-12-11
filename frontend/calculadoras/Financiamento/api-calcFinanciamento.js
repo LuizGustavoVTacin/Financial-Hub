@@ -1,33 +1,6 @@
 const FinanciamentoAPI = {
 
     /**
-     * SOLVER NUMÉRICO (Método de Newton-Raphson)
-     * Necessário para encontrar a taxa de juros (Raiz da equação)
-     */
-    _fsolve: (equacao, chuteInicial = 0.01) => {
-        let x = chuteInicial;
-        const tolerancia = 1e-7;
-        const maxIteracoes = 100;
-        const h = 1e-5; 
-
-        for (let i = 0; i < maxIteracoes; i++) {
-            const y = equacao(x);
-            
-            // Se o resultado for muito próximo de 0, achamos a raiz
-            if (Math.abs(y) < tolerancia) return x;
-
-            // Derivada numérica
-            const y_plus = equacao(x + h);
-            const derivada = (y_plus - y) / h;
-
-            if (Math.abs(derivada) < 1e-9) break;
-
-            x = x - (y / derivada);
-        }
-        return x;
-    },
-
-    /**
      * MODO 1: Descobrir Taxa de Juros (Juros do Empréstimo)
      * Usa o Solver Numérico acima.
      */
@@ -39,7 +12,7 @@ const FinanciamentoAPI = {
             return parcela - (valorEmprestado * i) / (1 - Math.pow(1 + i, -meses));
         };
 
-        const taxaDecimal = FinanciamentoAPI._fsolve(equacao, 0.01);
+        const taxaDecimal = UTILS._fsolve(equacao, 0.01);
         return taxaDecimal; 
     },
 
@@ -90,21 +63,44 @@ const FinanciamentoAPI = {
         let novaParcela = parcelaOriginal;
 
         if (tipoAmortizacao === 'prazo') {
-            // REDUZIR PRAZO (Mantém parcela, reduz N)
             const numerador = Math.log(1 - (novoSaldoDevedor * taxa / parcelaOriginal));
             const denominador = Math.log(1 + taxa);
-            novoN = -(numerador / denominador);
-            
-            novoValorPrincipal = Math.ceil(novoN); // Retorna número de parcelas
-            novoTotal = parcelaOriginal * novoN; // Total considerando parcelas inteiras
+            const novoN_Exact = -(numerador / denominador);
 
-        } else {
-            // REDUZIR PARCELA (Mantém N, reduz PMT)
-            novaParcela = FinanciamentoAPI.calcParcela(novoSaldoDevedor, taxa, n);
-            
-            novoValorPrincipal = novaParcela; // Retorna valor monetário
-            novoTotal = novaParcela * n;
-        }
+            // 2. Separar meses cheios
+            // Usamos floor para pegar quantas parcelas INTEIRAS cabem
+            const mesesCheios = Math.floor(novoN_Exact); 
+
+            // 3. Calcular o Saldo Devedor após pagar os meses cheios
+            // Fórmula do Valor Futuro de uma anuidade (FV)
+            // Saldo = Divida * (1+i)^n - PMT * [((1+i)^n - 1) / i]
+            const fatorJuros = Math.pow(1 + taxa, mesesCheios);
+            const saldoAposMesesCheios = (novoSaldoDevedor * fatorJuros) - (parcelaOriginal * (fatorJuros - 1) / taxa);
+
+            // 4. Calcular a Parcela Residual (A última)
+            // O saldo restante sofre juros de mais 1 mês antes de ser pago
+            let parcelaResidual = saldoAposMesesCheios * (1 + taxa);
+
+            // ARREDONDAMENTO BANCÁRIO:
+            // Se a residual for muito pequena (ex: centavos), bancos costumam somar na anterior.
+            // Mas para simulação, vamos considerar como uma última parcela distinta.
+                
+            // 5. Totais Finais
+            // O novo N será os meses cheios + 1 (se houver residual significativo)
+            novoN = parcelaResidual > 0.01 ? mesesCheios + 1 : mesesCheios;
+                
+            // O total pago é a soma das cheias + a residual
+            novoTotal = (parcelaOriginal * mesesCheios) + parcelaResidual;
+                
+            // Para exibição, usamos o novoN inteiro
+            novoValorPrincipal = novoN; 
+
+            } else {
+
+                novaParcela = FinanciamentoAPI.calcParcela(novoSaldoDevedor, taxa, n);
+                novoValorPrincipal = novaParcela;
+                novoTotal = novaParcela * n;
+            }
 
         const economia = totalRestanteOriginal - (novoTotal + amortizacao);
 

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Planejamentos</title>
+    <link rel="stylesheet" href="style-calcPlanejamento.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+    <div class="calc-wrapper">
+        
+        <main class="calc-main">
+            
+            <!-- HEADER -->
+            <header class="calc-header relative">
+                <div class="title-wrapper" onclick="toggleMenu()">
+                    <h2 id="titulo-func">Simular Investimento vs Amortização</h2>
+                    <span class="material-icons arrow-icon">expand_more</span>
+                </div>
+                <p id="desc-func">Escolha a melhor estratégia para você.</p>
+
+                <!-- MENU DE MODOS (DROPDOWN PRINCIPAL) -->
+                <div id="menu-modos" class="dropdown-menu hidden">
+                    <div class="dropdown-item" onclick="mudarModo('comparacao')">
+                        <strong>Comparar Estratégias</strong>
+                        <small>Investir vs Amortizar Dívida (Gráfico).</small>
+                    </div>
+                    
+                    <div class="dropdown-item" onclick="mudarModo('meta')">
+                        <strong>Calculadora de Metas</strong>
+                        <small>Quanto investir para realizar um sonho?</small>
+                    </div>
+
+                    <div class="dropdown-item" onclick="mudarModo('fire')">
+                        <strong>Independência Financeira (FIRE)</strong>
+                        <small>Quando poderei viver de renda?</small>
+                    </div>
+                </div>
+            </header>
+
+            <!-- FORMULÁRIO -->
+            <form class="inputs-grid" onsubmit="return false;">
+                
+                <div class="left-input-group" id="col-esquerda">
+                    <div class="input-group" id="group-investido">
+                        <label id="lbl-investido" for="val-investido">Montante Investido</label>
+                        <div class="input-wrapper">
+                            <span class="currency">R$</span>
+                            <input type="text" id="val-investido" value="140.000,00">
+                        </div>
+                    </div>
+
+                    <!-- ESTE GRUPO SERÁ OCULTADO NO MODO META/FIRE VIA JS -->
+                    <div class="input-group" id="group-aporte">
+                        <label id="lbl-aporte" for="val-aporte">Aporte Mensal</label>
+                        <div class="input-wrapper">
+                            <span class="currency">R$</span>
+                            <input type="text" id="val-aporte" value="5.500,00">
+                        </div>
+                    </div>
+
+                    <!-- CAMPO DE RENDIMENTO COM MENU FLUTUANTE -->
+                    <!-- Importante: O JS precisa garantir que este ID 'group-rendimento' NÃO seja ocultado -->
+                    <div class="input-group relative" id="group-rendimento">
+                        <label id="lbl-rendimento" for="val-rendimento">Rendimento Médio</label>
+
+                        <div class="input-wrapper compound">
+                            <span class="prefix">%</span>
+                            <input type="text" id="val-rendimento" value="13,75">
+                            
+                            <select id="tipo-rendimento" class="suffix-select">
+                                <option value="anual" selected>Anual</option>
+                                <option value="mensal">Mensal</option>
+                            </select>
+
+                            <button type="button" id="btn-ativos" class="btn-asset-trigger" onclick="toggleMenuAtivos()">
+                                Selecionar
+                            </button>
+                        </div>
+
+                        <!-- MENU DE ATIVOS (DROPDOWN SECUNDÁRIO) -->
+                        <div id="dropdown-ativos" class="assets-dropdown hidden">
+                            <div class="dropdown-header">Ativos Disponíveis</div>
+                            <ul id="lista-ativos-db" class="assets-list">
+                                <!-- Preenchido via JS -->
+                            </ul>
+                            <div class="dropdown-item-manual" onclick="ativarModoManual()">
+                                <span class="material-icons" style="font-size: 14px;">edit</span>
+                                Digitar valor manualmente
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right-input-group" id="col-direita">
+                    <div class="input-group" id="group-financiamento">
+                        <label id="lbl-financiamento" for="val-financiamento">Valor Restante</label>
+                        <div class="input-wrapper">
+                            <span class="currency">R$</span>
+                            <input type="text" id="val-financiamento" value="100.000,00">
+                        </div>
+                    </div>
+
+                    <!-- ESTE GRUPO SERÁ OCULTADO NO MODO META/FIRE VIA JS -->
+                    <div class="input-group" id="group-parcela">
+                        <label id="lbl-parcela" for="val-parcela">Parcela Mensal</label>
+                        <div class="input-wrapper">
+                            <span class="currency">R$</span>
+                            <input type="text" id="val-parcela" value="1500,00">
+                        </div>              
+                    </div>
+
+                    <div class="input-group" id="group-periodo">
+                        <label id="lbl-periodo" for="val-periodo">Período</label>
+                        <div class="input-wrapper compound">
+                            <input type="text" id="val-periodo" value="80"> 
+                            <select id="tipo-periodo" class="suffix-select">
+                                <option value="anos">Anos</option>
+                                <option value="meses" selected>Meses</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="divider"></div>
+
+            <div class="actions">
+                <button id="btn-calcular" class="btn btn-primary">Calcular</button>
+                <button id="btn-limpar" class="btn btn-secondary">Limpar</button>
+            </div>
+
+            <!-- SEM DIVIDER AQUI -->
+
+            <!-- ÁREA DE RESULTADOS (APENAS O GRÁFICO) -->
+            <!-- O JS injetará o resultado como Título do Gráfico -->
+            <div id="results-container" class="results-area">
+                <div class="chart-container">
+                    <canvas id="chartPlanejamento"></canvas>
+                </div>
+            </div>
+
+        </main>
+
+        <aside class="calc-sidebar">
+            <div class="sidebar-item" onclick="window.location.href='../JurosCompostos/index-calcJurosComposto.html'">
+                <div class="img-box">
+                    <img src="../../imgs/JurosCompostos.png" alt="Juros Compostos">
+                </div>
+                <span>Juros</span>
+            </div>
+
+            <div class="sidebar-item" onclick="window.location.href='../Financiamento/index-calcFinanciamento.html'">
+                <div class="img-box">
+                    <img src="../../imgs/Financiamento.png" alt="Financiamento">
+                </div>
+                <span>Financiamento</span>
+            </div>
+
+            <div class="sidebar-item active-item">
+                <div class="img-box">
+                    <img src="../../imgs/calendario.png" alt="Planejamento">
+                </div>
+                <span>Planejamento</span>
+            </div>
+            
+            <div class="sidebar-item" onclick="alert('Funcionalidade em desenvolvimento!')">
+                <div class="img-box">
+                    <img src="../../imgs/Ferias.png" alt="Ferias">
+                </div>
+                <span>Férias</span>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Bibliotecas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@2.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+    <script src="../../utils.js"></script>
+    <script src="api-calcPlanejamento.js"></script>
+    <script src="script-calcPlanejamento.js"></script>
+    
+    <script>
+        // Lógica de tema (Mantida)
+        function carregarTema() {
+            const temaSalvo = localStorage.getItem('theme');
+            const preferenciaSistema = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (temaSalvo === 'dark' || (!temaSalvo && preferenciaSistema)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        carregarTema();
+        window.addEventListener('message', (event) => {
+            if (event.data === 'set-dark') {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark'); 
+            } else if (event.data === 'set-light') {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
+</body>
+</html>

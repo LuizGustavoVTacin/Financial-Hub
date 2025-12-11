@@ -1,11 +1,10 @@
 /* --- VARIAVEIS E TEMA --- */
 :root {
     /* Cores Light Mode (Baseado no seu config original) */
-    --bg-body: #f9fafb;       /* gray-50 */
-    --bg-sidebar: #bfbfbf;    /* Sua cor custom */
-    --bg-header: #ffffff;
-    --bg-card: #a8a8a8;       /* Sua cor custom */
-    --text-primary: #1f2937;  /* gray-800 */
+    --bg-body: #f3f4f6;
+    --bg-card: #ffffff;
+    --bg-input: #ffffff;
+    --text-primary: #1f2937;
     --text-secondary: #4b5563;
     
     --brand-blue: #2980b9;

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Juros Compostos</title>
-    <link rel="stylesheet" href="style-calcJurosComposto.css">
+    <title>Calculadora Financiamento</title>
+    
+    <link rel="stylesheet" href="style-calcFinanciamento.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
@@ -15,20 +16,27 @@
             
             <header class="calc-header relative">
                 <div class="title-wrapper" onclick="toggleMenu()">
-                    <h2 id="titulo-func">Simular Juros Composto</h2>
+                    <h2 id="titulo-func">Descobrir Taxa Real</h2>
                     <span class="material-icons arrow-icon">expand_more</span>
                 </div>
-                <p id="desc-func">Planeje seu futuro com juros compostos.</p>
+                <p id="desc-func">Saiba qual a taxa real cobrada no seu financiamento.</p>
 
                 <div id="menu-modos" class="dropdown-menu hidden">
-                    <div class="dropdown-item" onclick="mudarModo('composto')">
-                        <strong>Juros Compostos</strong>
-                        <small>Juros sobre juros (Padrão).</small>
+                    <div class="dropdown-item" onclick="mudarModo('taxa')">
+                        <strong>Descobrir Taxa Real</strong>
+                        <small>Tenho a parcela e o valor, quero a taxa.</small>
                     </div>
-                    
-                    <div class="dropdown-item" onclick="mudarModo('simples')">
-                        <strong>Juros Simples</strong>
-                        <small>Rendimento linear (Ideal para curto prazo).</small>
+                    <div class="dropdown-item" onclick="mudarModo('parcela')">
+                        <strong>Simular Parcela</strong>
+                        <small>Tenho a taxa e o valor, quero a parcela.</small>
+                    </div>
+                    <div class="dropdown-item" onclick="mudarModo('valor')">
+                        <strong>Descobrir Valor Financiado</strong>
+                        <small>Tenho a parcela e a taxa, quanto posso financiar?</small>
+                    </div>
+                    <div class="dropdown-item" onclick="mudarModo('amortizacao')">
+                        <strong>Tabela de Amortização</strong>
+                        <small>Gerar tabela de amortização do financiamento.</small>
                     </div>
                 </div>
             </header>
@@ -36,18 +44,18 @@
             <form class="inputs-grid" onsubmit="return false;">
                 
                 <div class="input-group" id="group-valor">
-                    <label for="val-inicial">Valor Inicial</label>
+                    <label for="val-inicial">Saldo Devedor / Valor</label>
                     <div class="input-wrapper">
                         <span class="currency">R$</span>
-                        <input type="text" id="val-inicial" value="10.000,00">
+                        <input type="text" id="val-inicial" value="50.000,00">
                     </div>
                 </div>
 
                 <div class="input-group" id="group-parcela">
-                    <label for="val-mensal">Aporte Mensal</label>
+                    <label for="val-mensal">Valor da Parcela</label>
                     <div class="input-wrapper">
                         <span class="currency">R$</span>
-                        <input type="text" id="val-mensal" value="500,00">
+                        <input type="text" id="val-mensal" value="1.500,00">
                     </div>
                 </div>
 
@@ -55,22 +63,39 @@
                     <label for="val-taxa">Taxa de Juros</label>
                     <div class="input-wrapper compound">
                         <span class="prefix">%</span>
-                        <input type="text" id="val-taxa" value="13,75">
-                        
-                        <select id="tipo-taxa" class="suffix-select">
-                            <option value="anual" selected>Anual</option>
-                            <option value="mensal">Mensal</option>
+                        <input type="text" id="val-taxa" value="1,50">
+                        <select id="tipo-taxa-input" class="suffix-select">
+                            <option value="mensal" selected>Mensal</option>
+                            <option value="anual">Anual</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="input-group" id="group-periodo">
-                    <label for="val-periodo">Período</label>
+                    <label for="val-periodo">Período Restante</label>
                     <div class="input-wrapper compound">
-                        <input type="text" id="val-periodo" value="10"> 
+                        <input type="text" id="val-periodo" value="48">
                         <select id="tipo-periodo" class="suffix-select">
-                            <option value="anos" selected>Anos</option>
-                            <option value="meses">Meses</option>
+                            <option value="meses" selected>Meses</option>
+                            <option value="anos">Anos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group" id="group-amortizacao-valor" style="display: none;">
+                    <label for="val-amortizacao-valor">Valor a Amortizar</label>
+                    <div class="input-wrapper">
+                        <span class="currency">R$</span>
+                        <input type="text" id="val-amortizacao-valor" value="5.000,00">
+                    </div>
+                </div>
+
+                <div class="input-group" id="group-amortizacao" style="display: none;">
+                    <label for="tipo-amortizacao">O que reduzir?</label>
+                    <div class="input-wrapper">
+                        <select id="tipo-amortizacao" class="suffix-select">
+                            <option value="prazo" selected>Reduzir Prazo</option>
+                            <option value="parcela">Reduzir Parcela</option>
                         </select>
                     </div>
                 </div>
@@ -79,42 +104,42 @@
             <div class="divider"></div>
 
             <div class="results-container">
-                <div class="result-card highlight">
-                    <span class="res-label">Valor Total Final</span>
-                    <span id="res-total" class="res-value">R$ ---</span>
+                <div class="result-card highlight" id="card-res-1">
+                    <span class="res-label" id="label-res-1">Taxa Mensal</span>
+                    <span id="res-1" class="res-value">---</span>
                 </div>
-                <div class="result-card">
-                    <span class="res-label">Total Investido</span>
-                    <span id="res-investido" class="res-value">R$ ---</span>
+                <div class="result-card" id="card-res-2">
+                    <span class="res-label" id="label-res-2">Taxa Anual</span>
+                    <span id="res-2" class="res-value">---</span>
                 </div>
-                <div class="result-card">
-                    <span class="res-label">Total em Juros</span>
-                    <span id="res-juros" class="res-value">R$ ---</span>
+                <div class="result-card" id="card-total">
+                    <span class="res-label">Total Pago</span>
+                    <span id="res-total" class="res-value">---</span>
                 </div>
             </div>
-
+          
             <div class="actions">
-                <button id="btn-calcular" class="btn btn-primary">Calcular Rendimento</button>
+                <button id="btn-calcular" class="btn btn-primary">Calcular</button>
                 <button id="btn-limpar" class="btn btn-secondary">Limpar</button>
             </div>
         </main>
 
         <aside class="calc-sidebar">
-            <div class="sidebar-item active-item">
+            <div class="sidebar-item" onclick="window.location.href='../jurosCompostos/index-calcJurosComposto.html'">
                 <div class="img-box">
                     <img src="../../imgs/JurosCompostos.png" alt="Juros Compostos">
                 </div>
-                <span>Juros</span>
+                <span>Juros Compostos</span>
             </div>
 
-            <div class="sidebar-item" onclick="window.location.href='../Financiamento/index-calcFinanciamento.html'">
+            <div class="sidebar-item active-item">
                 <div class="img-box">
                     <img src="../../imgs/Financiamento.png" alt="Financiamento">
                 </div>
                 <span>Financiamento</span>
             </div>
 
-            <div class="sidebar-item" onclick="alert('Funcionalidade em desenvolvimento!')">
+            <div class="sidebar-item" onclick="window.location.href='../Planejamento/index-calcPlanejamento.html'">
                 <div class="img-box">
                     <img src="../../imgs/calendario.png" alt="Planejamento">
                 </div>
@@ -132,8 +157,8 @@
     </div>
 
     <script src="../../utils.js"></script>
-    <script src="api-calcJurosCompostos.js"></script>
-    <script src="script-calcJurosComposto.js"></script>
+    <script src="api-calcFinanciamento.js"></script>
+    <script src="script-calcFinanciamento.js"></script>
     
 <script>
         // --- LÓGICA UNIVERSAL DE TEMA ---

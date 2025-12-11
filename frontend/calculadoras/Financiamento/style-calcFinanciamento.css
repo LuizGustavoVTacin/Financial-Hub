@@ -68,12 +68,12 @@ html.dark .suffix-select option {
     /* Light Mode */
     --bg-body: #f3f4f6;
     --bg-card: #ffffff;
-    --bg-input: #f9fafb;
+    --bg-input: #ffffff;
     --text-primary: #1f2937;
-    --text-secondary: #6b7280;
+    --text-secondary: #4b5563;
     --brand-blue: #2980b9;
     --brand-hover: #1c6ea4;
-    --border-color: #e5e7eb;
+    --border-color: #d1d5db;
     --highlight-bg: #eff6ff;
     
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -81,9 +81,9 @@ html.dark .suffix-select option {
 
 html.dark {
     /* Dark Mode */
-    --bg-body: #1f2937; /* Combinando com o fundo do Dashboard */
-    --bg-card: #374151;
-    --bg-input: #4b5563;
+    --bg-body: #111827;
+    --bg-card: #1f2937;
+    --bg-input: #374151;
     --text-primary: #f9fafb;
     --text-secondary: #d1d5db;
     --brand-blue: #48C7F5;
