@@ -384,3 +384,72 @@ body {
     .sidebar-item { min-width: 80px; }
     .img-box { height: 50px; width: 50px; }
 }
+
+/* Cabeçalho do Gráfico */
+.chart-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+
+#chart-title-html {
+    color: var(--brand-blue);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* Container de Ajuda */
+.help-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.help-icon {
+    color: var(--text-secondary);
+    cursor: help;
+    font-size: 1.4rem;
+    transition: color 0.2s;
+}
+
+.help-icon:hover { color: var(--brand-blue); }
+
+/* Balão de Mensagem (Tooltip) */
+.help-tooltip {
+    visibility: hidden;
+    width: 280px;
+    background-color: var(--menu-bg);
+    color: var(--menu-text-desc);
+    text-align: left;
+    border-radius: 8px;
+    padding: 12px;
+    position: absolute;
+    z-index: 100;
+    right: 0;
+    top: 130%;
+    opacity: 0;
+    transition: opacity 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    border: 1px solid var(--menu-border);
+}
+
+.help-container:hover .help-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Setinha do balão */
+.help-tooltip::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    right: 10px;
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent transparent var(--menu-bg) transparent;
+}

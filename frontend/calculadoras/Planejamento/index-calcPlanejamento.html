@@ -37,6 +37,11 @@
                         <strong>Independência Financeira (FIRE)</strong>
                         <small>Quando poderei viver de renda?</small>
                     </div>
+
+                    <div class="dropdown-item" onclick="mudarModo('avista_parcelado')">
+                        <strong>À Vista vs. Parcelado</strong>
+                        <small>Simule o impacto de descontos vs. juros compostos.</small>
+                    </div>
                 </div>
             </header>
 
@@ -48,7 +53,7 @@
                         <label id="lbl-investido" for="val-investido">Montante Investido</label>
                         <div class="input-wrapper">
                             <span class="currency">R$</span>
-                            <input type="text" id="val-investido" value="140.000,00">
+                            <input type="text" id="val-investido" value="40.000,00">
                         </div>
                     </div>
 
@@ -137,6 +142,15 @@
             <!-- ÁREA DE RESULTADOS (APENAS O GRÁFICO) -->
             <!-- O JS injetará o resultado como Título do Gráfico -->
             <div id="results-container" class="results-area">
+                <div class="chart-header">
+                    <h3 id="chart-title-html">Resultado da Simulação</h3>
+                    <div class="help-container">
+                        <span class="material-icons help-icon">help_outline</span>
+                        <div id="help-tooltip-text" class="help-tooltip">
+                            </div>
+                    </div>
+                </div>
+                
                 <div class="chart-container">
                     <canvas id="chartPlanejamento"></canvas>
                 </div>

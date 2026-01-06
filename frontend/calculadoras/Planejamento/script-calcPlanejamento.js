@@ -12,78 +12,109 @@ const UI = {
     parsePercent: (v) => v ? parseFloat(v.replace(',', '.')) : 0
 };
 
-// --- 1. ALTERNÂNCIA DE MODOS ---
+const EXPLICACOES = {
+    comparacao: "Este gráfico compara o seu patrimônio líquido (Investimentos menos Dívidas). A estratégia vencedora é a que faz sua curva subir mais rápido.",
+    meta: "Mostra a evolução mensal do seu capital investido somado aos aportes até atingir a linha tracejada do seu objetivo.",
+    fire: "Projeta o crescimento do seu patrimônio até que o rendimento mensal gerado seja suficiente para cobrir seu custo de vida (Independência Financeira).",
+    avista_parcelado: "Este gráfico mostra o seu 'Saldo de Caixa'. <br><br><b>À Vista:</b> Representa o crescimento dos juros sobre o dinheiro que você economizou com o desconto.<br><b>Parcelado:</b> Mostra seu capital total rendendo, mas sendo consumido mensalmente pelo pagamento das parcelas."
+};
+
 function mudarModo(novoModo) {
     modoAtual = novoModo;
     const titulo = document.getElementById('titulo-func');
     const desc = document.getElementById('desc-func');
+    const spanSimbolo = document.querySelector('#group-financiamento .currency');
     
-    // Elementos de UI
+    // Captura dos inputs para definir valores de exemplo
+    const inputInvestido = document.getElementById('val-investido');
+    const inputFinanciamento = document.getElementById('val-financiamento');
+    const inputPeriodo = document.getElementById('val-periodo');
+    const inputAporte = document.getElementById('val-aporte');
+
+    // Elementos de layout
     const grpAporte = document.getElementById('group-aporte');
     const grpParcela = document.getElementById('group-parcela');
     const grpPeriodo = document.getElementById('group-periodo');
-    const grpRendimento = document.getElementById('group-rendimento'); 
-    
     const lblInvestido = document.getElementById('lbl-investido');
     const lblFinanciamento = document.getElementById('lbl-financiamento');
-    const cardsContainer = document.getElementById('cards-result');
+    const lblPeriodo = document.getElementById('lbl-periodo');
 
-    // Reset visual: exibe grupos padrão
-    grpAporte.style.display = 'block';
-    grpParcela.style.display = 'block';
-    grpPeriodo.style.display = 'block';
-    grpRendimento.style.display = 'block'; 
+    // RESET PADRÃO (Garante que a UI volte ao estado original)
+    if (grpAporte) grpAporte.style.display = 'block';
+    if (grpParcela) grpParcela.style.display = 'block';
+    if (grpPeriodo) grpPeriodo.style.display = 'block';
+    if (lblPeriodo) lblPeriodo.innerText = "Período";
+    if (spanSimbolo) spanSimbolo.innerText = "R$"; 
 
-    // Garante que a área de resultados esteja visível
-    document.getElementById('results-container').classList.remove('hidden');
-
+    // APLICAÇÃO DOS VALORES POR MODO
     if (modoAtual === 'comparacao') {
-        titulo.innerText = "Investimento vs Amortização";
-        desc.innerText = "Compare o impacto de investir ou pagar dívida.";
+        titulo.innerText = "Simular Investimento vs Amortização";
+        desc.innerText = "Escolha a melhor estratégia para você.";
         lblInvestido.innerText = "Montante Investido";
-        lblFinanciamento.innerText = "Saldo Devedor";
+        lblFinanciamento.innerText = "Valor Restante";
         
-        // Em comparação, mantemos os cards visíveis para mostrar detalhes dos dois cenários
-        if(cardsContainer) cardsContainer.classList.remove('hidden');
+        inputInvestido.value = "40.000,00";
+        inputFinanciamento.value = "100.000,00";
+        inputPeriodo.value = "80";
 
     } else if (modoAtual === 'meta') {
         titulo.innerText = "Calculadora de Metas";
-        desc.innerText = "Descubra quanto investir mensalmente para seu sonho.";
+        desc.innerText = "Descubra quanto investir para realizar um sonho.";
         lblInvestido.innerText = "Já tenho investido";
         lblFinanciamento.innerText = "Valor da Meta (Objetivo)";
         
-        grpAporte.style.display = 'none'; 
-        grpParcela.style.display = 'none';
+        inputInvestido.value = "10.000,00";
+        inputFinanciamento.value = "50.000,00";
+        inputPeriodo.value = "24";
         
-        // Esconde cards, resultado será no gráfico
-        if(cardsContainer) cardsContainer.classList.add('hidden');
+        if (grpAporte) grpAporte.style.display = 'none';
+        if (grpParcela) grpParcela.style.display = 'none';
 
     } else if (modoAtual === 'fire') {
         titulo.innerText = "Independência Financeira (FIRE)";
-        desc.innerText = "Planeje sua aposentadoria e liberdade.";
+        desc.innerText = "Quando poderei viver de renda?";
         lblInvestido.innerText = "Patrimônio Atual";
         lblFinanciamento.innerText = "Custo de Vida Mensal";
         
-        grpParcela.style.display = 'none';
-        grpPeriodo.style.display = 'none';
+        inputInvestido.value = "100.000,00";
+        inputFinanciamento.value = "5.000,00";
+        inputAporte.value = "2.000,00";
+
+        if (grpParcela) grpParcela.style.display = 'none';
+        if (grpPeriodo) grpPeriodo.style.display = 'none';
+
+    } else if (modoAtual === 'avista_parcelado') {
+        titulo.innerText = "À Vista vs. Parcelado";
+        desc.innerText = "Vale a pena o desconto ou parcelar e investir?";
+        lblInvestido.innerText = "Valor Total do Bem (R$)";
+        lblFinanciamento.innerText = "Desconto à Vista (%)";
         
-        // Esconde cards, resultado será no gráfico
-        if(cardsContainer) cardsContainer.classList.add('hidden');
+        if (spanSimbolo) spanSimbolo.innerText = "%"; 
+        if (lblPeriodo) lblPeriodo.innerText = "Número de Parcelas";
+
+        // CONFIGURAÇÃO DOS VALORES DE EXEMPLO (IPVA ou Compras)
+        inputInvestido.value = "1.500,00"; 
+        inputFinanciamento.value = "10,00"; // Agora inicia com 10% conforme solicitado
+        inputPeriodo.value = "12"; 
+        
+        if (grpAporte) grpAporte.style.display = 'none';
+        if (grpParcela) grpParcela.style.display = 'none';
     }
     
     fecharMenuModos();
-    realizarSimulacao();
+    realizarSimulacao(); // Executa para já plotar o gráfico com os valores novos
 }
-
-// --- 2. CÁLCULO CORE ---
+// --- 2. CÁLCULO CORE (CORRIGIDO) ---
 async function realizarSimulacao() {
     try {
         const valEsq = UI.parseBRL(document.getElementById('val-investido').value);
+        // Tratamento especial para o Desconto: se for modo avista_parcelado, parseia como número simples
         const valDir = UI.parseBRL(document.getElementById('val-financiamento').value);
+        
         const valAporte = UI.parseBRL(document.getElementById('val-aporte').value);
         const valParcela = UI.parseBRL(document.getElementById('val-parcela').value);
         
-        let prazo = parseFloat(document.getElementById('val-periodo').value);
+        let prazo = parseFloat(document.getElementById('val-periodo').value) || 0;
         if (document.getElementById('tipo-periodo').value === 'anos') prazo *= 12;
 
         const taxaInput = UI.parsePercent(document.getElementById('val-rendimento').value);
@@ -98,33 +129,36 @@ async function realizarSimulacao() {
                 dividaTotal: valDir, parcelaDivida: valParcela, prazoMeses: prazo,
                 montanteInvestido: valEsq, aporteMensal: valAporte, taxaInvestMensal: taxaMensal
             });
-            
-            // Atualiza cards de comparação (opcional, mantido para este modo)
-            const diff = res.cenario2[res.cenario2.length-1] - res.cenario1[res.cenario1.length-1];
-            atualizarCards("Diferença Final", UI.formatBRL(diff), "Cenário Investir", UI.formatBRL(res.cenario1[res.cenario1.length-1]), "Cenário Amortizar", UI.formatBRL(res.cenario2[res.cenario2.length-1]));
-            
             atualizarGraficoComparacao(res);
 
         } else if (modoAtual === 'meta') {
             const res = await PlanejamentoAPI.calcularMeta({
                 valorMeta: valDir, valorAtual: valEsq, prazoMeses: prazo, taxaMensal: taxaMensal
             });
-            
-            // Cria texto de destaque para o gráfico
-            const textoResultado = `Aporte Mensal Necessário: ${UI.formatBRL(res.aporteMensal)}`;
-            atualizarGraficoMeta(res, textoResultado);
+            atualizarGraficoMeta(res, `Aporte Mensal Necessário: ${UI.formatBRL(res.aporteMensal)}`);
 
         } else if (modoAtual === 'fire') {
             const res = await PlanejamentoAPI.calcularFIRE({
                 custoMensal: valDir, valorAtual: valEsq, aporteMensal: valAporte, taxaMensal: taxaMensal
             });
+            atualizarGraficoFIRE(res, `Liberdade em: ${res.anosParaLiberdade.toFixed(1)} anos`);
+
+        } else if (modoAtual === 'avista_parcelado') {
+            const res = await PlanejamentoAPI.simularAVistaVsParcelado({
+                total: valEsq,
+                descontoPercent: valDir, 
+                parcelas: prazo,
+                taxaMensal: taxaMensal
+            });
             
-            // Cria texto de destaque para o gráfico
-            const textoResultado = `Liberdade em: ${res.anosParaLiberdade.toFixed(1)} anos (${res.mesesParaLiberdade.toFixed(0)} meses)`;
-            atualizarGraficoFIRE(res, textoResultado);
+            const textoResultado = res.economiaReal > 0 
+                ? `Vantagem à Vista: ${UI.formatBRL(res.economiaReal)}` 
+                : `Vantagem Parcelado: ${UI.formatBRL(Math.abs(res.economiaReal))}`;
+
+            atualizarGraficoAvista(res, textoResultado);
         }
 
-    } catch (e) { console.error(e); }
+    } catch (e) { console.error("Erro na simulação:", e); }
 }
 
 function atualizarCards(lbl1, val1, lbl2, val2, lbl3, val3) {
@@ -141,6 +175,7 @@ function atualizarCards(lbl1, val1, lbl2, val2, lbl3, val3) {
 
 // --- 3. GRÁFICOS ---
 
+// --- 3. GRÁFICOS (MANTIDOS E ADICIONADO AVISTA) ---
 const COLOR_C1 = '#7c3aed'; 
 const BG_C1 = 'rgba(124, 58, 237, 0.1)';
 const COLOR_C2 = '#06b6d4'; 
@@ -152,7 +187,6 @@ function atualizarGraficoComparacao(dados) {
     const ctx = document.getElementById('chartPlanejamento').getContext('2d');
     const labels = Array.from({length: dados.prazo + 1}, (_, i) => i);
     if (chartInstance) chartInstance.destroy();
-
     chartInstance = new Chart(ctx, {
         type: 'line',
         data: {
@@ -170,15 +204,11 @@ function atualizarGraficoMeta(dados, textoResultado) {
     const ctx = document.getElementById('chartPlanejamento').getContext('2d');
     const labels = Array.from({length: dados.prazo + 1}, (_, i) => i);
     if (chartInstance) chartInstance.destroy();
-
     chartInstance = new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
-            datasets: [{
-                label: 'Evolução do Patrimônio', data: dados.grafico,
-                borderColor: COLOR_C1, backgroundColor: BG_C1, fill: true, borderWidth: 3, pointRadius: 0
-            }]
+            datasets: [{ label: 'Evolução', data: dados.grafico, borderColor: COLOR_C1, backgroundColor: BG_C1, fill: true, borderWidth: 3, pointRadius: 0 }]
         },
         options: getChartOptionsWithLine(dados.metaAlvo, "Meta", textoResultado)
     });
@@ -188,15 +218,11 @@ function atualizarGraficoFIRE(dados, textoResultado) {
     const ctx = document.getElementById('chartPlanejamento').getContext('2d');
     const labels = dados.grafico.map((_, i) => i);
     if (chartInstance) chartInstance.destroy();
-
     chartInstance = new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
-            datasets: [{
-                label: 'Rumo à Liberdade', data: dados.grafico,
-                borderColor: COLOR_META, backgroundColor: BG_META, fill: true, borderWidth: 3, pointRadius: 0
-            }]
+            datasets: [{ label: 'Rumo à Liberdade', data: dados.grafico, borderColor: COLOR_META, backgroundColor: BG_META, fill: true, borderWidth: 3, pointRadius: 0 }]
         },
         options: getChartOptionsWithLine(dados.metaAlvo, "Número Mágico", textoResultado)
     });
@@ -204,65 +230,58 @@ function atualizarGraficoFIRE(dados, textoResultado) {
 
 // Configuração Base do Gráfico
 function getChartOptions(tituloPrincipal) {
+    // Injeta o título no HTML
+    const elTitulo = document.getElementById('chart-title-html');
+    if (elTitulo) elTitulo.innerText = tituloPrincipal;
+    
+    // Injeta a explicação no balão de ajuda
+    const elAjuda = document.getElementById('help-tooltip-text');
+    if (elAjuda) elAjuda.innerHTML = EXPLICACOES[modoAtual] || "Sem explicação disponível.";
+
     return {
-        responsive: true, 
+        responsive: true,
         maintainAspectRatio: false,
-        interaction: { mode: 'index', intersect: false },
+        interaction: {
+            intersect: false,
+            mode: 'index',
+        },
         plugins: {
-            // TÍTULO GRANDE (Serve como Legenda de Resultado)
-            title: {
-                display: !!tituloPrincipal,
-                text: tituloPrincipal,
-                font: { size: 22, weight: 'bold', family: "'Segoe UI', sans-serif" },
-                padding: { top: 10, bottom: 20 },
-                color: '#2980b9' // Azul da marca
-            },
+            title: { display: false }, // Título agora é via HTML
             legend: { display: true, position: 'bottom' },
             tooltip: {
-                backgroundColor: 'rgba(0,0,0,0.8)',
-                titleFont: { size: 13 },
-                bodyFont: { size: 13 },
-                padding: 10,
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                padding: 12,
                 callbacks: {
                     label: function(context) {
-                        return context.dataset.label + ': ' + UI.formatBRL(context.parsed.y);
+                        let label = context.dataset.label || '';
+                        if (label) label += ': ';
+                        if (context.parsed.y !== null) label += UI.formatBRL(context.parsed.y);
+                        return label;
                     }
                 }
             }
         },
         scales: {
-            x: { display: false },
-            y: { 
-                grid: { color: 'rgba(0,0,0,0.05)' },
-                ticks: { callback: (v) => v >= 1000 ? (v/1000).toFixed(0)+'k' : v }
-            }
+            y: { ticks: { callback: (v) => UI.formatBRL(v) } }
         }
     };
 }
 
-// Configuração com Linha de Meta (Tracejada)
 function getChartOptionsWithLine(valorMeta, labelMeta, tituloResultado) {
     const opts = getChartOptions(tituloResultado);
-    
-    // Adiciona anotação se o plugin estiver disponível
     if (window.Chart && window.Chart.registry.plugins.get('annotation')) {
         opts.plugins.annotation = {
             annotations: {
                 line1: {
                     type: 'line', yMin: valorMeta, yMax: valorMeta,
                     borderColor: 'rgba(255, 99, 132, 0.8)', borderWidth: 2, borderDash: [6, 6],
-                    label: { 
-                        content: labelMeta + ': ' + UI.formatBRL(valorMeta), 
-                        enabled: true, position: 'end', 
-                        backgroundColor: 'rgba(255,99,132,0.8)', color: 'white', font: { size: 11, weight: 'bold' }
-                    }
+                    label: { content: labelMeta, enabled: true, position: 'end' }
                 }
             }
         };
     }
     return opts;
 }
-
 // --- 4. SETUP E EVENTOS ---
 
 window.toggleMenu = function() {
@@ -302,6 +321,39 @@ async function carregarAtivosNoMenu() {
     });
 }
 
+function atualizarGraficoAvista(dados, textoResultado) {
+    const ctx = document.getElementById('chartPlanejamento').getContext('2d');
+    const labels = Array.from({length: dados.prazo + 1}, (_, i) => `Mês ${i}`);
+    if (chartInstance) chartInstance.destroy();
+    chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                { 
+                    label: 'Saldo (Pagar à Vista)', 
+                    data: dados.cenarioAVista, 
+                    borderColor: '#10b981', 
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)', 
+                    fill: true, 
+                    pointRadius: 4, // Pontos visíveis
+                    pointHoverRadius: 6 
+                },
+                { 
+                    label: 'Saldo (Pagar Parcelado)', 
+                    data: dados.cenarioParcelado, 
+                    borderColor: '#ef4444', 
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)', 
+                    fill: true, 
+                    pointRadius: 4, 
+                    pointHoverRadius: 6 
+                }
+            ]
+        },
+        options: getChartOptions(textoResultado)
+    });
+}
+
 window.toggleMenuAtivos = function() { 
     const menu = document.getElementById('dropdown-ativos');
     
@@ -328,15 +380,25 @@ window.ativarModoManual = function() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    carregarAtivosNoMenu();
-    
-    // Máscaras
+    // Configura máscaras para os campos
     ['val-investido', 'val-aporte', 'val-financiamento', 'val-parcela'].forEach(id => {
         const el = document.getElementById(id);
         if(el) {
             el.addEventListener('input', (e) => {
+                // Se for o campo de desconto no modo À Vista, permitimos números decimais simples
+                if (id === 'val-financiamento' && modoAtual === 'avista_parcelado') {
+                    // Remove tudo que não for número ou vírgula/ponto
+                    e.target.value = e.target.value.replace(/[^\d,.]/g, "");
+                    return;
+                }
+                
+                // Máscara de Moeda R$ padrão para os outros casos
                 let v = e.target.value.replace(/\D/g, "");
-                e.target.value = (parseInt(v) / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+                if (v === "") v = "0";
+                e.target.value = (parseInt(v) / 100).toLocaleString("pt-BR", { 
+                    minimumFractionDigits: 2, 
+                    maximumFractionDigits: 2 
+                });
             });
         }
     });
@@ -344,29 +406,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCalc = document.getElementById('btn-calcular');
     if(btnCalc) btnCalc.addEventListener('click', realizarSimulacao);
     
-    const btnLimp = document.getElementById('btn-limpar');
-    if(btnLimp) btnLimp.addEventListener('click', () => {
-        document.querySelector('.inputs-grid').reset();
-        document.getElementById('val-investido').value = "0,00";
-        if(modoAtual !== 'meta') document.getElementById('val-financiamento').value = "0,00";
-        limparResultados();
-    });
-
-    // Fechar menus ao clicar fora
-    document.addEventListener('click', (e) => {
-        const menuM = document.getElementById('menu-modos');
-        const tit = document.querySelector('.title-wrapper');
-        if (menuM && !menuM.classList.contains('hidden') && !menuM.contains(e.target) && !tit.contains(e.target)) {
-            fecharMenuModos();
-        }
-        
-        const menuA = document.getElementById('dropdown-ativos');
-        const btnA = document.getElementById('btn-ativos');
-        if (menuA && !menuA.classList.contains('hidden') && !menuA.contains(e.target) && e.target !== btnA) {
-            menuA.classList.add('hidden');
-        }
-    });
-
-    // Inicia
+    // Inicia no modo comparação
     mudarModo('comparacao');
 });

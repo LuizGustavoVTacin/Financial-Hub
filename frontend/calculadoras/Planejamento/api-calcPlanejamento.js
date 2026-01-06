@@ -144,7 +144,40 @@ const PlanejamentoAPI = {
             grafico: evolucao,
             metaAlvo: numeroMagico
         };
-    }
+    },
+
+    simularAVistaVsParcelado: async (params) => {
+        const { total, descontoPercent, parcelas, taxaMensal } = params;
+        
+        // Cenário 1: Pagamento à Vista com Desconto
+        const valorComDesconto = total * (1 - (descontoPercent / 100));
+        let saldoAVista = total - valorComDesconto; // O que sobrou do "montante" inicial
+        let c1 = [saldoAVista];
+
+        // Cenário 2: Pagamento Parcelado (Sem juros da loja, mas perdendo o desconto)
+        const valorParcela = total / parcelas;
+        let saldoParcelado = total; 
+        let c2 = [saldoParcelado];
+
+        for (let m = 1; m <= parcelas; m++) {
+            // Evolução À Vista (Rendimento puro do que sobrou)
+            saldoAVista = saldoAVista * (1 + taxaMensal);
+            c1.push(saldoAVista);
+
+            // Evolução Parcelado (Rende, mas paga a parcela)
+            saldoParcelado = (saldoParcelado * (1 + taxaMensal)) - valorParcela;
+            c2.push(Math.max(0, saldoParcelado));
+        }
+
+        return { 
+            tipo: 'avista_parcelado', 
+            prazo: parcelas, 
+            cenarioAVista: c1, 
+            cenarioParcelado: c2,
+            economiaReal: c1[c1.length-1] - c2[c2.length-1]
+        };
+    },
+
 };
 
 window.PlanejamentoAPI = PlanejamentoAPI;
