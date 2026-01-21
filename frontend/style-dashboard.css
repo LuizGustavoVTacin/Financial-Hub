@@ -31,6 +31,12 @@ html.dark {
 /* --- RESET & GLOBAL --- */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    -webkit-overflow-scrolling: touch;
+}
+
 body {
     background-color: var(--bg-body);
     color: var(--text-primary);
