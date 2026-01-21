@@ -177,30 +177,88 @@ html, body {
 }
 
 /* --- Ajuste na Seção Mobile --- */
+/* --- BLOCO CORRIGIDO PARA MOBILE (Adicione ao final do style-dashboard.css) --- */
 @media (max-width: 768px) {
-    /* Garante que o container pai permita crescimento */
-    .main-content {
-        display: block !important; /* Flexbox às vezes trava o scroll vertical no mobile */
+    /* 1. Libera a rolagem na raiz da página */
+    html, body {
         overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch;
-        height: 100vh; /* Ocupa a tela toda mas permite conteúdo interno maior */
+        height: auto !important;
+    }
+
+    /* 2. Transforma a Sidebar em Menu Inferior (Bottom Nav) */
+    .sidebar {
+        width: 100% !important;
+        height: 4.5rem !important;
+        flex-direction: row !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        padding: 0 !important;
+        gap: 0 !important;
+        justify-content: space-around;
+        z-index: 1000;
+        transition: none; /* Evita delays no mobile */
+    }
+
+    .nav-menu {
+        flex-direction: row !important;
+        height: 100%;
+        gap: 0 !important;
+    }
+
+    .nav-item {
+        padding: 0.5rem !important;
+        border-left: none !important;
+        border-top: 4px solid transparent; /* Indicador agora é no topo */
+        flex: 1;
+    }
+
+    .nav-item.active {
+        border-top-color: var(--brand-blue);
+    }
+
+    .nav-item span {
+        display: none; /* Esconde o texto para priorizar os ícones no celular */
+    }
+
+    /* 3. Libera o conteúdo principal para crescer verticalmente */
+    .main-content {
+        height: auto !important;
+        min-height: 100vh;
+        overflow: visible !important;
+        display: block !important; /* Block permite o scroll natural do navegador */
+        padding-bottom: 5.5rem; /* Espaço para não ficar atrás do menu inferior */
     }
 
     .content-wrapper {
-        display: block !important;
+        padding: 1rem;
         height: auto !important;
-        min-height: 100%;
+        overflow: visible !important;
     }
 
     .view-section {
-        display: block !important; /* Empilha tudo verticalmente */
+        flex-direction: column !important;
         height: auto !important;
+        gap: 1rem;
     }
 
-    /* O Iframe precisa de uma altura definida ou crescer com o conteúdo */
+    /* 4. Ajuste do Iframe para não colapsar */
     iframe {
-        min-height: 700px; /* Garante que os botões da calculadora apareçam */
-        height: auto !important; 
-        overflow: auto;
+        min-height: 85vh !important; /* Garante que a calculadora apareça por inteiro */
+        height: auto !important;
+        border-radius: 1rem;
+    }
+
+    .top-header {
+        padding: 0 1rem;
+    }
+
+    .top-header h1 {
+        font-size: 1.2rem;
+    }
+
+    /* Esconde elementos desnecessários no perfil mobile */
+    .profile-container {
+        display: none;
     }
 }
