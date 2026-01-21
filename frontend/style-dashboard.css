@@ -170,65 +170,53 @@ iframe { width: 100%; height: 100%; border: none; border-radius: 1.5rem; box-sha
 .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 20px; }
 
 @media (max-width: 768px) {
-    /* Transforma a sidebar em uma barra fixa no fundo */
+    /* 1. Libera a rolagem no corpo da página */
+    body {
+        overflow-y: auto !important;
+        overflow-x: hidden;
+        height: auto !important;
+    }
+
+    /* 2. Menu Inferior */
     .sidebar {
         width: 100% !important;
         height: 4.5rem !important;
-        flex-direction: row !important; /* Itens lado a lado */
+        flex-direction: row !important;
         position: fixed;
         bottom: 0;
         left: 0;
         padding: 0 !important;
-        gap: 0 !important;
         justify-content: space-around;
+        z-index: 1000; /* Garante que fique acima de tudo */
     }
 
-    .nav-menu {
-        flex-direction: row !important;
-        height: 100%;
-    }
-
-    .nav-item {
-        border-left: none !important;
-        border-top: 4px solid transparent; /* Indicador agora é no topo do ícone */
-        padding: 0.5rem !important;
-        flex: 1;
-    }
-
-    .nav-item.active {
-        border-top-color: var(--brand-blue);
-        background-color: rgba(41, 128, 185, 0.1);
-    }
-
-    /* Ajusta o conteúdo principal para não ficar escondido atrás da barra */
+    /* 3. Ajuste do conteúdo principal */
     .main-content {
-        padding-bottom: 5rem; 
+        overflow: visible !important;
+        height: auto !important;
+        padding-bottom: 6rem; /* Espaço extra para o menu inferior */
     }
-}
 
-@media (max-width: 768px) {
-    .content-wrapper{
-        padding: 1rem;
-        overflow-y: visible;
+    .content-wrapper {
+        padding: 0.75rem;
+        overflow: visible !important;
+        height: auto !important;
     }
 
     .view-section {
-        flex-direction: column !important; /* Gráfico em cima, cards embaixo */
+        flex-direction: column !important;
         height: auto !important;
-        gap: 2rem;
     }
 
-    .chart-card {
-        width: 100%;
-        min-height: 350px; /* Garante que o gráfico não fique esmagado */
-    }
-
-    .cards-list {
-        width: 100% !important; /* Cards ocupam a largura total */
-        padding-right: 0;
+    /* 4. O ajuste crucial para o Iframe no Mobile */
+    iframe {
+        height: 85vh !important; /* Força o iframe a ocupar a tela quase toda */
+        min-height: 600px;      /* Garante que não fique esmagado */
+        border-radius: 1rem;
+        -webkit-overflow-scrolling: touch; /* Melhora a rolagem no iPhone */
     }
 
     .top-header h1 {
-        font-size: 1.25rem; /* Título menor para evitar quebra de linha */
+        font-size: 1.2rem;
     }
 }
