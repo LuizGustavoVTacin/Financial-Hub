@@ -88,8 +88,11 @@ html.dark .profile-container { border-color: #d1d5db; }
 
 /* --- MAIN CONTENT --- */
 .main-content {
-    flex: 1; display: flex; flex-direction: column;
-    position: relative; overflow: auto;
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-y: auto;
 }
 
 /* Header */
@@ -122,7 +125,7 @@ html.dark .icon.sun { display: block; }
 html.dark .icon.moon { display: none; }
 
 /* --- VIEWS --- */
-.content-wrapper { flex: 1; padding: 1.5rem; overflow: hidden; position: relative; }
+.content-wrapper { flex: 1; padding: 1.5rem; overflow: visible; position: relative; }
 .view-section { width: 100%; height: 100%; display: flex; gap: 1.5rem; }
 
 /* Gráfico */
@@ -204,13 +207,20 @@ iframe { width: 100%; height: 100%; border: none; border-radius: 1.5rem; box-sha
 }
 
 @media (max-width: 768px) {
+    .content-wrapper{
+        padding: 1rem;
+        overflow-y: visible;
+    }
+
     .view-section {
         flex-direction: column !important; /* Gráfico em cima, cards embaixo */
-        overflow-y: auto;
+        height: auto !important;
+        gap: 2rem;
     }
 
     .chart-card {
-        min-height: 300px; /* Garante que o gráfico não fique esmagado */
+        width: 100%;
+        min-height: 350px; /* Garante que o gráfico não fique esmagado */
     }
 
     .cards-list {
