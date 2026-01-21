@@ -1,60 +1,3 @@
-@media (max-width: 768px) {
-    /* Transforma a sidebar em uma barra fixa no fundo */
-    .sidebar {
-        width: 100% !important;
-        height: 4.5rem !important;
-        flex-direction: row !important; /* Itens lado a lado */
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        padding: 0 !important;
-        gap: 0 !important;
-        justify-content: space-around;
-    }
-
-    .nav-menu {
-        flex-direction: row !important;
-        height: 100%;
-    }
-
-    .nav-item {
-        border-left: none !important;
-        border-top: 4px solid transparent; /* Indicador agora é no topo do ícone */
-        padding: 0.5rem !important;
-        flex: 1;
-    }
-
-    .nav-item.active {
-        border-top-color: var(--brand-blue);
-        background-color: rgba(41, 128, 185, 0.1);
-    }
-
-    /* Ajusta o conteúdo principal para não ficar escondido atrás da barra */
-    .main-content {
-        padding-bottom: 5rem; 
-    }
-}
-
-@media (max-width: 768px) {
-    .view-section {
-        flex-direction: column !important; /* Gráfico em cima, cards embaixo */
-        overflow-y: auto;
-    }
-
-    .chart-card {
-        min-height: 300px; /* Garante que o gráfico não fique esmagado */
-    }
-
-    .cards-list {
-        width: 100% !important; /* Cards ocupam a largura total */
-        padding-right: 0;
-    }
-
-    .top-header h1 {
-        font-size: 1.25rem; /* Título menor para evitar quebra de linha */
-    }
-}
-
 /* --- VARIAVEIS E TEMA --- */
 :root {
     /* Cores Light Mode (Baseado no seu config original) */
@@ -91,7 +34,7 @@ html.dark {
 body {
     background-color: var(--bg-body);
     color: var(--text-primary);
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     overflow: hidden;
     transition: background-color 0.3s, color 0.3s;
@@ -146,7 +89,7 @@ html.dark .profile-container { border-color: #d1d5db; }
 /* --- MAIN CONTENT --- */
 .main-content {
     flex: 1; display: flex; flex-direction: column;
-    position: relative; overflow: hidden;
+    position: relative; overflow: auto;
 }
 
 /* Header */
@@ -222,3 +165,60 @@ iframe { width: 100%; height: 100%; border: none; border-radius: 1.5rem; box-sha
 /* Scrollbar */
 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 20px; }
+
+@media (max-width: 768px) {
+    /* Transforma a sidebar em uma barra fixa no fundo */
+    .sidebar {
+        width: 100% !important;
+        height: 4.5rem !important;
+        flex-direction: row !important; /* Itens lado a lado */
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        padding: 0 !important;
+        gap: 0 !important;
+        justify-content: space-around;
+    }
+
+    .nav-menu {
+        flex-direction: row !important;
+        height: 100%;
+    }
+
+    .nav-item {
+        border-left: none !important;
+        border-top: 4px solid transparent; /* Indicador agora é no topo do ícone */
+        padding: 0.5rem !important;
+        flex: 1;
+    }
+
+    .nav-item.active {
+        border-top-color: var(--brand-blue);
+        background-color: rgba(41, 128, 185, 0.1);
+    }
+
+    /* Ajusta o conteúdo principal para não ficar escondido atrás da barra */
+    .main-content {
+        padding-bottom: 5rem; 
+    }
+}
+
+@media (max-width: 768px) {
+    .view-section {
+        flex-direction: column !important; /* Gráfico em cima, cards embaixo */
+        overflow-y: auto;
+    }
+
+    .chart-card {
+        min-height: 300px; /* Garante que o gráfico não fique esmagado */
+    }
+
+    .cards-list {
+        width: 100% !important; /* Cards ocupam a largura total */
+        padding-right: 0;
+    }
+
+    .top-header h1 {
+        font-size: 1.25rem; /* Título menor para evitar quebra de linha */
+    }
+}
