@@ -5,4 +5,5 @@ calc/*
 *.drawio
 *.py
 .md
+.*
 Projeto/imgs
