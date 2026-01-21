@@ -169,54 +169,38 @@ iframe { width: 100%; height: 100%; border: none; border-radius: 1.5rem; box-sha
 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 20px; }
 
+/* --- Ajuste no Reset Global --- */
+html, body {
+    /* Remova ou comente o overflow: hidden global se quiser rolagem total */
+    height: 100%;
+    -webkit-overflow-scrolling: touch; /* Suaviza o scroll no iOS */
+}
+
+/* --- Ajuste na Seção Mobile --- */
 @media (max-width: 768px) {
-    /* 1. Libera a rolagem no corpo da página */
-    body {
-        overflow-y: auto !important;
-        overflow-x: hidden;
-        height: auto !important;
-    }
-
-    /* 2. Menu Inferior */
-    .sidebar {
-        width: 100% !important;
-        height: 4.5rem !important;
-        flex-direction: row !important;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        padding: 0 !important;
-        justify-content: space-around;
-        z-index: 1000; /* Garante que fique acima de tudo */
-    }
-
-    /* 3. Ajuste do conteúdo principal */
+    /* Garante que o container pai permita crescimento */
     .main-content {
-        overflow: visible !important;
-        height: auto !important;
-        padding-bottom: 6rem; /* Espaço extra para o menu inferior */
+        display: block !important; /* Flexbox às vezes trava o scroll vertical no mobile */
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        height: 100vh; /* Ocupa a tela toda mas permite conteúdo interno maior */
     }
 
     .content-wrapper {
-        padding: 0.75rem;
-        overflow: visible !important;
+        display: block !important;
         height: auto !important;
+        min-height: 100%;
     }
 
     .view-section {
-        flex-direction: column !important;
+        display: block !important; /* Empilha tudo verticalmente */
         height: auto !important;
     }
 
-    /* 4. O ajuste crucial para o Iframe no Mobile */
+    /* O Iframe precisa de uma altura definida ou crescer com o conteúdo */
     iframe {
-        height: 85vh !important; /* Força o iframe a ocupar a tela quase toda */
-        min-height: 600px;      /* Garante que não fique esmagado */
-        border-radius: 1rem;
-        -webkit-overflow-scrolling: touch; /* Melhora a rolagem no iPhone */
-    }
-
-    .top-header h1 {
-        font-size: 1.2rem;
+        min-height: 700px; /* Garante que os botões da calculadora apareçam */
+        height: auto !important; 
+        overflow: auto;
     }
 }
