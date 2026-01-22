@@ -9,7 +9,7 @@
     
     --brand-blue: #2980b9;
     
-    /* Utilitários */
+    /* UtilitÃ¡rios */
     --border-color: #e5e7eb;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -31,16 +31,10 @@ html.dark {
 /* --- RESET & GLOBAL --- */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 
-html, body {
-    height: 100%;
-    margin: 0;
-    -webkit-overflow-scrolling: touch;
-}
-
 body {
     background-color: var(--bg-body);
     color: var(--text-primary);
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     overflow: hidden;
     transition: background-color 0.3s, color 0.3s;
@@ -71,7 +65,7 @@ body {
 html.dark .profile-container { border-color: #d1d5db; }
 .profile-container:hover { transform: scale(1.05); }
 
-/* Navegação */
+/* NavegaÃ§Ã£o */
 .nav-menu { width: 100%; display: flex; flex-direction: column; gap: 1rem; }
 
 .nav-item {
@@ -94,11 +88,8 @@ html.dark .profile-container { border-color: #d1d5db; }
 
 /* --- MAIN CONTENT --- */
 .main-content {
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow-y: auto;
+    flex: 1; display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
 }
 
 /* Header */
@@ -131,10 +122,10 @@ html.dark .icon.sun { display: block; }
 html.dark .icon.moon { display: none; }
 
 /* --- VIEWS --- */
-.content-wrapper { flex: 1; padding: 1.5rem; overflow: visible; position: relative; }
+.content-wrapper { flex: 1; padding: 1.5rem; overflow: hidden; position: relative; }
 .view-section { width: 100%; height: 100%; display: flex; gap: 1.5rem; }
 
-/* Gráfico */
+/* GrÃ¡fico */
 .chart-card {
     flex: 1;
     background-color: var(--bg-header);
@@ -174,97 +165,3 @@ iframe { width: 100%; height: 100%; border: none; border-radius: 1.5rem; box-sha
 /* Scrollbar */
 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 20px; }
-
-/* --- Ajuste no Reset Global --- */
-html, body {
-    /* Remova ou comente o overflow: hidden global se quiser rolagem total */
-    height: 100%;
-    -webkit-overflow-scrolling: touch; /* Suaviza o scroll no iOS */
-}
-
-/* --- Ajuste na Seção Mobile --- */
-/* --- BLOCO CORRIGIDO PARA MOBILE (Adicione ao final do style-dashboard.css) --- */
-@media (max-width: 768px) {
-    /* 1. Libera a rolagem na raiz da página */
-    html, body {
-        overflow-y: auto !important;
-        height: auto !important;
-    }
-
-    /* 2. Transforma a Sidebar em Menu Inferior (Bottom Nav) */
-    .sidebar {
-        width: 100% !important;
-        height: 4.5rem !important;
-        flex-direction: row !important;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        padding: 0 !important;
-        gap: 0 !important;
-        justify-content: space-around;
-        z-index: 1000;
-        transition: none; /* Evita delays no mobile */
-    }
-
-    .nav-menu {
-        flex-direction: row !important;
-        height: 100%;
-        gap: 0 !important;
-    }
-
-    .nav-item {
-        padding: 0.5rem !important;
-        border-left: none !important;
-        border-top: 4px solid transparent; /* Indicador agora é no topo */
-        flex: 1;
-    }
-
-    .nav-item.active {
-        border-top-color: var(--brand-blue);
-    }
-
-    .nav-item span {
-        display: none; /* Esconde o texto para priorizar os ícones no celular */
-    }
-
-    /* 3. Libera o conteúdo principal para crescer verticalmente */
-    .main-content {
-        height: auto !important;
-        min-height: 100vh;
-        overflow: visible !important;
-        display: block !important; /* Block permite o scroll natural do navegador */
-        padding-bottom: 5.5rem; /* Espaço para não ficar atrás do menu inferior */
-    }
-
-    .content-wrapper {
-        padding: 1rem;
-        height: auto !important;
-        overflow: visible !important;
-    }
-
-    .view-section {
-        flex-direction: column !important;
-        height: auto !important;
-        gap: 1rem;
-    }
-
-    /* 4. Ajuste do Iframe para não colapsar */
-    iframe {
-        min-height: 85vh !important; /* Garante que a calculadora apareça por inteiro */
-        height: auto !important;
-        border-radius: 1rem;
-    }
-
-    .top-header {
-        padding: 0 1rem;
-    }
-
-    .top-header h1 {
-        font-size: 1.2rem;
-    }
-
-    /* Esconde elementos desnecessários no perfil mobile */
-    .profile-container {
-        display: none;
-    }
-}
